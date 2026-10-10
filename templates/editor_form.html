@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Write and publish a QABeacon story.">
+    <title>{{ "Edit story" if article else "Write a story" }} — QABeacon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="editor-page">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="{{ url_for('index') }}" aria-label="QABeacon home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>QABeacon<span class="brand-period">.</span></span>
+        </a>
+        <a class="back-link" href="{{ url_for('editor') }}">← Story dashboard</a>
+      </div>
+    </header>
+    <main class="editor-form-page wrap">
+      <a class="form-back-link" href="{{ url_for('editor') }}">← All stories</a>
+      <div class="sidebar-label">STORY EDITOR</div>
+      <h1>{{ "Edit your story" if article else "Write a new story" }}</h1>
+      <p class="editor-form-intro">Shape the details, then publish directly to your blog.</p>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <p class="editor-flash {{ category }}" role="status">{{ message }}</p>
+        {% endfor %}
+      {% endwith %}
+      <form class="story-editor-form" method="post">
+        <input type="hidden" name="csrf_token" value="{{ editor_csrf_token() }}">
+        <div class="form-grid">
+          <div class="form-field form-field-wide">
+            <label for="title">Story title <span>*</span></label>
+            <input id="title" name="title" type="text" maxlength="160" placeholder="A title that makes people curious" value="{{ article.title if article else '' }}" required>
+          </div>
+          <div class="form-field form-field-wide">
+            <label for="summary">Short summary <span>*</span></label>
+            <textarea id="summary" name="summary" rows="3" maxlength="500" placeholder="Give readers the signal in a sentence or two." required>{{ article.summary if article else '' }}</textarea>
+          </div>
+          <div class="form-field">
+            <label for="category">Topic <span>*</span></label>
+            <select id="category" name="category" required>
+              {% for topic in topics %}
+              <option value="{{ topic }}" {% if article and article.category == topic %}selected{% endif %}>{{ topic }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="date">Publish date <span>*</span></label>
+            <input id="date" name="date" type="text" maxlength="40" placeholder="October 4, 2026" value="{{ article.date if article else '' }}" required>
+          </div>
+          <div class="form-field">
+            <label for="author">Author <span>*</span></label>
+            <input id="author" name="author" type="text" maxlength="80" placeholder="Your name" value="{{ article.author if article else '' }}" required>
+          </div>
+          <div class="form-field">
+            <label for="read_time">Reading time <span>*</span></label>
+            <input id="read_time" name="read_time" type="text" maxlength="30" placeholder="5 min read" value="{{ article.read_time if article else '' }}" required>
+          </div>
+          <div class="form-field form-field-wide">
+            <label for="body">Story text <span>*</span></label>
+            <textarea id="body" name="body" class="body-input" rows="16" maxlength="20000" placeholder="Write your story here. Separate paragraphs with a blank line." required>{{ article.body if article else '' }}</textarea>
+            <small>Plain text is safe by default. Blank lines separate paragraphs.</small>
+          </div>
+        </div>
+        <label class="feature-choice">
+          <input type="checkbox" name="feature" value="1" {% if is_featured %}checked{% endif %}>
+          <span class="feature-check" aria-hidden="true"></span>
+          <span><strong>Make this the Editor’s pick</strong><small>Feature it prominently at the top of the homepage.</small></span>
+        </label>
+        <div class="editor-form-actions">
+          <a class="cancel-button" href="{{ url_for('editor') }}">Cancel</a>
+          <button class="primary-button" type="submit">{{ "Save changes" if article else "Publish story" }} <span aria-hidden="true">→</span></button>
+        </div>
+      </form>
+    </main>
+    <footer class="site-footer">
+      <div class="footer-inner wrap">
+        <a class="brand footer-brand" href="{{ url_for('index') }}"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>QABeacon<span class="brand-period">.</span></span></a>
+        <span class="footer-copy">Developer workspace</span>
+        <span class="footer-copy footer-year">© 2026 QABeacon| All rights reserved</span>
+      </div>
+    </footer>
+  </body>
+</html>

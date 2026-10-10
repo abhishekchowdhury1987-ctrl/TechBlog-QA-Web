@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Developer sign-in for the QABeacon story editor.">
+    <title>Developer sign-in — QABeacon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="editor-page">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="{{ url_for('index') }}" aria-label="QABeacon home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>QABeacon<span class="brand-period">.</span></span>
+        </a>
+        <a class="back-link" href="{{ url_for('index') }}">← Back to stories</a>
+      </div>
+    </header>
+    <main class="editor-auth-wrap">
+      <section class="editor-auth-card">
+        <div class="newsletter-icon" aria-hidden="true">✳</div>
+        <div class="sidebar-label">DEVELOPER ACCESS</div>
+        <h1>Welcome back,<br>builder.</h1>
+        <p>Sign in to create, edit, and publish stories on QABeacon.</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+          <p class="editor-flash {{ category }}" role="status">{{ message }}</p>
+          {% endfor %}
+        {% endwith %}
+        <form class="editor-login-form" method="post">
+          <input type="hidden" name="csrf_token" value="{{ editor_csrf_token() }}">
+          <label for="password">Developer password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
+          <button class="primary-button" type="submit">Sign in <span aria-hidden="true">→</span></button>
+        </form>
+        <a class="auth-back-link" href="{{ url_for('index') }}">← Return to the blog</a>
+      </section>
+    </main>
+  </body>
+</html>

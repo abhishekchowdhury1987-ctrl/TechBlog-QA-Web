@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="Ideas, updates, and practical guides for the people building what comes next.">
+    <title>QABeacon — Ideas for builders</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="{{ url_for('index') }}" aria-label="QABeacon home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>QABeacon<span class="brand-period">.</span></span>
+        </a>
+        <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+          <a class="nav-link active" href="{{ url_for('index') }}">Stories</a>
+          <a class="nav-link" href="#topics">Topics</a>
+          <a class="nav-link" href="#newsletter">Newsletter</a>
+          {% if editor_enabled %}<a class="nav-link editor-nav-link" href="{{ url_for('editor') }}">{{ "Story editor" if editor_signed_in else "Developer" }}</a>{% endif %}
+        </nav>
+        <form class="search-form" action="{{ url_for('index') }}" method="get" role="search">
+          <label class="sr-only" for="search">Search stories</label>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+          <input id="search" type="search" name="q" placeholder="Search stories" value="{{ query }}">
+          {% if selected_topic %}<input type="hidden" name="topic" value="{{ selected_topic }}">{% endif %}
+          <button type="submit">Search</button>
+        </form>
+        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="main-nav">
+          <span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro wrap">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> THE BUILDER'S DISPATCH</div>
+        <div class="intro-row">
+          <div>
+            <h1>Ideas for people<br>building <span>what's next.</span></h1>
+            <p class="intro-copy">Fresh thinking, useful tools, and stories from across the automation testing ecosystem.</p>
+          </div>
+          <div class="issue-note"><span>ISSUE 042</span><span>October 2026</span></div>
+        </div>
+      </section>
+
+      <div class="wrap">
+        {% if featured %}
+        <section class="featured-section" aria-labelledby="featured-heading">
+          <div class="section-heading">
+            <h2 id="featured-heading">Editor’s pick</h2>
+            <span class="heading-rule"></span>
+            <span class="section-kicker">A story worth your time</span>
+          </div>
+          <article class="featured-card">
+            <a class="featured-image image-link" href="{{ url_for('story', slug=featured.slug) }}" aria-label="Read {{ featured.title }}">
+              <img src="https://images.unsplash.com/{{ featured.image }}?auto=format&fit=crop&w=1500&q=85" alt="Abstract technology artwork">
+              <span class="image-label"><span class="live-dot"></span> EDITOR'S PICK</span>
+            </a>
+            <div class="featured-content">
+              <div class="article-meta"><a href="{{ url_for('index', topic=featured.category) }}">{{ featured.category }}</a><span class="meta-separator">/</span><span>{{ featured.date }}</span></div>
+              <h3><a href="{{ url_for('story', slug=featured.slug) }}">{{ featured.title }}</a></h3>
+              <p>{{ featured.summary }}</p>
+              <div class="featured-bottom">
+                <span class="byline"><span class="avatar avatar-violet">D</span> {{ featured.author }}</span>
+                <a class="read-link" href="{{ url_for('story', slug=featured.slug) }}">Read the story <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+          </article>
+        </section>
+        {% endif %}
+
+        <div class="content-layout">
+          <section class="latest-section" aria-labelledby="latest-heading">
+            <div class="section-heading latest-heading">
+              <h2 id="latest-heading">{% if query or selected_topic %}Search results{% else %}The latest{% endif %}</h2>
+              <span class="heading-rule"></span>
+              <span class="section-kicker">{% if query %}{{ articles|length }} stories for “{{ query }}”{% elif selected_topic %}{{ selected_topic }}{% else %}Ideas to take further{% endif %}</span>
+            </div>
+            <div class="topic-pills" aria-label="Filter stories by topic">
+              <a class="topic-pill {% if not selected_topic %}selected{% endif %}" href="{{ url_for('index', q=query or None) }}">All stories</a>
+              {% for topic in topics %}
+              <a class="topic-pill {% if selected_topic == topic %}selected{% endif %}" href="{{ url_for('index', topic=topic, q=query or None) }}">{{ topic }}</a>
+              {% endfor %}
+            </div>
+            {% if articles %}
+            <div class="article-grid">
+              {% for article in articles %}
+              <article class="article-card">
+                <a class="card-image image-link" href="{{ url_for('story', slug=article.slug) }}" tabindex="-1" aria-hidden="true">
+                  <img src="https://images.unsplash.com/{{ article.image }}?auto=format&fit=crop&w=900&q=80" alt="" loading="lazy">
+                  <span class="image-arrow" aria-hidden="true">↗</span>
+                </a>
+                <div class="card-content">
+                  <div class="article-meta"><a href="{{ url_for('index', topic=article.category) }}">{{ article.category }}</a><span class="meta-separator">/</span><span>{{ article.date }}</span></div>
+                  <h3><a href="{{ url_for('story', slug=article.slug) }}">{{ article.title }}</a></h3>
+                  <p>{{ article.summary }}</p>
+                  <div class="card-footer"><span>{{ article.read_time }}</span><span class="footer-dot"></span><span>{{ article.author }}</span></div>
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+              <span class="empty-icon" aria-hidden="true">⌕</span>
+              <h3>No stories found just yet</h3>
+              <p>Try another search or explore all of our latest stories.</p>
+              <a class="text-button" href="{{ url_for('index') }}">Browse all stories <span aria-hidden="true">→</span></a>
+            </div>
+            {% endif %}
+          </section>
+
+          <aside class="sidebar">
+            <section class="sidebar-block topics-block" id="topics">
+              <div class="sidebar-label">EXPLORE BY TOPIC</div>
+              <h2>Find your<br>next rabbit hole.</h2>
+              <ul class="topic-list">
+                {% for topic in topics %}
+                <li><a href="{{ url_for('index', topic=topic) }}"><span>{{ topic }}</span><span aria-hidden="true">↗</span></a></li>
+                {% endfor %}
+              </ul>
+            </section>
+            <section class="newsletter-card" id="newsletter">
+              <div class="newsletter-icon" aria-hidden="true">✳</div>
+              <div class="sidebar-label">A GOOD EMAIL, OCCASIONALLY</div>
+              <h2>Stay in the<br>build loop.</h2>
+              <p>One thoughtful roundup of the ideas shaping tech. No noise, just signal.</p>
+              {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                <p class="form-message {{ category }}" role="status">{{ message }}</p>
+                {% endfor %}
+              {% endwith %}
+              <form class="subscribe-form" action="{{ url_for('subscribe') }}" method="post">
+                <label class="sr-only" for="email">Your email address</label>
+                <input id="email" type="email" name="email" placeholder="you@example.com" required>
+                <button type="submit" aria-label="Subscribe to the newsletter">Join the list <span aria-hidden="true">→</span></button>
+              </form>
+              <span class="privacy-note">By subscribing, you agree to our very short emails.</span>
+            </section>
+            <div class="sidebar-note"><span class="note-spark">✳</span><p>Made for the curious.<br><strong>Built for what’s next.</strong></p></div>
+          </aside>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="footer-inner wrap">
+        <a class="brand footer-brand" href="{{ url_for('index') }}"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>QABeacon<span class="brand-period">.</span></span></a>
+        <span class="footer-copy">Ideas for people building what’s next.</span>
+        <span class="footer-copy footer-year">© 2026 QABeacon</span>
+      </div>
+    </footer>
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  </body>
+</html>

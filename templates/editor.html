@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Manage QABeacon stories.">
+    <title>Story editor — QABeacon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="editor-page">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="{{ url_for('index') }}" aria-label="QABeacon home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>QABeacon<span class="brand-period">.</span></span>
+        </a>
+        <nav class="editor-header-nav" aria-label="Editor navigation">
+          <a href="{{ url_for('index') }}">View blog <span aria-hidden="true">↗</span></a>
+          <form action="{{ url_for('editor_logout') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ editor_csrf_token() }}">
+            <button type="submit">Sign out</button>
+          </form>
+        </nav>
+      </div>
+    </header>
+    <main class="editor-dashboard wrap">
+      <div class="editor-heading-row">
+        <div>
+          <div class="sidebar-label">DEVELOPER WORKSPACE</div>
+          <h1>Your stories, your signal.</h1>
+          <p>Create and manage the stories published on QABeacon.</p>
+        </div>
+        <a class="primary-button new-story-button" href="{{ url_for('create_story') }}">＋ &nbsp;Write a story</a>
+      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <p class="editor-flash {{ category }}" role="status">{{ message }}</p>
+        {% endfor %}
+      {% endwith %}
+      {% if featured %}
+      <section class="editor-list-section">
+        <div class="editor-list-heading">
+          <div><span class="live-dot"></span><h2>Editor’s pick</h2><span class="editor-count">FEATURED</span></div>
+          <span class="editor-section-note">Shown at the top of the homepage</span>
+        </div>
+        <article class="editor-story-row featured-editor-row">
+          <img src="https://images.unsplash.com/{{ featured.image }}?auto=format&fit=crop&w=240&q=75" alt="">
+          <div class="editor-story-info">
+            <div class="article-meta"><span>{{ featured.category }}</span><span class="meta-separator">/</span><span>{{ featured.date }}</span></div>
+            <h3>{{ featured.title }}</h3>
+            <p>{{ featured.summary }}</p>
+          </div>
+          <div class="editor-story-actions">
+            <a class="editor-action edit-action" href="{{ url_for('edit_story', slug=featured.slug) }}">Edit story</a>
+            <form action="{{ url_for('delete_story', slug=featured.slug) }}" method="post" data-confirm-delete>
+              <input type="hidden" name="csrf_token" value="{{ editor_csrf_token() }}">
+              <button class="editor-action delete-action" type="submit">Delete</button>
+            </form>
+          </div>
+        </article>
+      </section>
+      {% endif %}
+
+      <section class="editor-list-section">
+        <div class="editor-list-heading">
+          <div><h2>All stories</h2><span class="editor-count">{{ articles|length }} STORIES</span></div>
+          <span class="editor-section-note">Most recent stories first</span>
+        </div>
+        {% if articles %}
+          {% for article in articles %}
+          <article class="editor-story-row">
+            <img src="https://images.unsplash.com/{{ article.image }}?auto=format&fit=crop&w=240&q=75" alt="">
+            <div class="editor-story-info">
+              <div class="article-meta"><span>{{ article.category }}</span><span class="meta-separator">/</span><span>{{ article.date }}</span></div>
+              <h3>{{ article.title }}</h3>
+              <p>{{ article.summary }}</p>
+            </div>
+            <div class="editor-story-actions">
+              <a class="editor-action edit-action" href="{{ url_for('edit_story', slug=article.slug) }}">Edit</a>
+              <form action="{{ url_for('delete_story', slug=article.slug) }}" method="post" data-confirm-delete>
+                <input type="hidden" name="csrf_token" value="{{ editor_csrf_token() }}">
+                <button class="editor-action delete-action" type="submit">Delete</button>
+              </form>
+            </div>
+          </article>
+          {% endfor %}
+        {% else %}
+        <div class="editor-empty">
+          <span aria-hidden="true">✳</span>
+          <h3>Your next story starts here.</h3>
+          <p>Write a new story and it will appear on your blog right away.</p>
+          <a class="text-button" href="{{ url_for('create_story') }}">Write your first story <span aria-hidden="true">→</span></a>
+        </div>
+        {% endif %}
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="footer-inner wrap">
+        <a class="brand footer-brand" href="{{ url_for('index') }}"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>QABeacon | All rights reserved<span class="brand-period">.</span></span></a>
+        <span class="footer-copy">Developer workspace</span>
+        <span class="footer-copy footer-year">© 2026 QABeacon | All rights reserved</span>
+      </div>
+    </footer>
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  </body>
+</html>

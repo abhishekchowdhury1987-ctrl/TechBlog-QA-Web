@@ -1,0 +1,103 @@
+{
+  "featured": {
+    "title": "The Singleton design pattern enables parallel execution????",
+    "summary": "A simple way to think about it\r\nA Singleton is like one shared printer in an office. Many people can send print jobs at the same time, but if the printer doesn’t handle jobs properly, documents can get mixed up. The pattern gives you one shared object; thread safety is what makes parallel use safe.",
+    "category": "Design",
+    "date": "October 4, 2026",
+    "read_time": "10min",
+    "author": "Abhishek Chowdhury",
+    "slug": "the-singleton-design-pattern-enables-parallel-execution",
+    "image": "photo-1677442136019-21780ecad995",
+    "body": "Not really. The Singleton pattern doesn’t “allow parallel execution” by itself—it just makes sure there’s only one instance of a class, shared by everyone who needs it.\n\nWhat that means in practice\nSeveral threads can call methods on that one shared object at the same time, so in that sense it can be used in a parallel environment. But whether that’s safe depends entirely on how the Singleton is written.\n\nIf the Singleton has no changing state, multiple threads can usually use it safely.\n\nIf it has mutable fields, threads can overwrite each other’s data, causing race conditions or unexpected behavior.\n\nIf the Singleton is created lazily without proper synchronization, two threads might both see it as null and accidentally create two instances—breaking the whole point of the pattern.\n\nWhen you need separate instances\nSometimes one shared object is actually the wrong choice. For example, in parallel test automation, each thread often needs its own browser session. In that case, developers use ThreadLocal so every thread gets its own instance, rather than forcing everyone to share one.\n\nSo the short version: Singleton gives you one shared object; parallel execution works only if that object is thread-safe."
+  },
+  "articles": [
+    {
+      "title": "Fallback mechanism is required for element identifier in automation framework???",
+      "summary": "Applications change frequently, so locators can break after small UI updates. Fallback locators let the framework try another safe way to find an element. Use a stable, meaningful primary locator—such as a unique ID or accessibility attribute—and reserve fallbacks for cases where they’re needed. Log whenever a fallback is used.",
+      "category": "Web",
+      "date": "October 4, 2026",
+      "read_time": "15mins",
+      "author": "Abhishek Chowdhury",
+      "slug": "fallback-mechanism-is-required-for-element-identifier-in-automation-framework",
+      "image": "photo-1677442136019-21780ecad995",
+      "body": "Yes, a fallback mechanism for identifying UI elements is highly recommended in an automation framework—but it should be treated as a backup, not a replacement for stable locators.\n\nWhy it is important\nUI elements can change because of:\n\nDynamic IDs or class names.\n\nMinor UI redesigns.\n\nChanges in DOM structure.\n\nDifferent environments or browsers.\n\nResponsive layouts.\n\nIf the framework depends on only one locator, even a small UI change can fail the test. A fallback strategy allows the framework to try another reliable way to identify the same element instead of failing immediately. This approach is commonly used in self-healing automation.\n\nExample\nSuppose you need to click a Login button. The framework could try:\n\nStable element ID.\n\nAccessibility label or role.\n\nA reliable CSS selector.\n\nText-based identification.\n\nXPath as a last structured option.\n\nImage recognition or OCR only as a final fallback.\n\nA typical sequence would be:\n\ntext\nTry ID\n  ↓ if not found\nTry accessibility role\n  ↓ if not found\nTry CSS selector\n  ↓ if not found\nTry text or XPath\n  ↓ if still not found\nLog the failure and stop safely\nImportant caution\nFallback should not silently click any element that looks similar. Before interacting, the framework should verify that the element is:\n\nVisible.\n\nEnabled.\n\nUnique.\n\nThe correct type, such as a button or input.\n\nLocated in the expected page or container.\n\nIf confidence is low, it is safer to fail with a clear error than to interact with the wrong element. Some automation platforms use validation and confidence checks for exactly this reason."
+    },
+    {
+      "slug": "from-prompt-to-production",
+      "title": "From prompt to production: a new era for AI developers",
+      "summary": "Meet the ideas, tools, and teams turning the next wave of AI breakthroughs into products people can use every day.",
+      "category": "AI & ML",
+      "date": "October 4, 2026",
+      "read_time": "9 min read",
+      "author": "The QASignal team",
+      "image": "photo-1676299081847-824916de030a",
+      "accent": "violet"
+    },
+    {
+      "slug": "building-faster-ai-experiences",
+      "title": "Building faster AI experiences with smarter inference",
+      "summary": "A practical look at the tools and techniques helping teams move generative AI from prototype to production.",
+      "category": "AI & ML",
+      "date": "October 2, 2026",
+      "read_time": "8 min read",
+      "author": "Maya Chen",
+      "image": "photo-1677442136019-21780ecad995",
+      "accent": "violet"
+    },
+    {
+      "slug": "designing-for-the-agentic-web",
+      "title": "Designing products for the agentic web",
+      "summary": "The best agent experiences feel less like a chatbot and more like a thoughtful collaborator.",
+      "category": "Web",
+      "date": "September 29, 2026",
+      "read_time": "6 min read",
+      "author": "Jordan Lee",
+      "image": "photo-1498050108023-c5249f4df085",
+      "accent": "blue"
+    },
+    {
+      "slug": "shipping-smaller-android-apps",
+      "title": "A smaller Android app starts with a better build",
+      "summary": "Trim what you ship, speed up installs, and make every megabyte count with these build system improvements.",
+      "category": "Android",
+      "date": "September 25, 2026",
+      "read_time": "5 min read",
+      "author": "Priya Nair",
+      "image": "photo-1512941937669-90a1b58e7e9c",
+      "accent": "green"
+    },
+    {
+      "slug": "cloud-costs-without-compromise",
+      "title": "Keep cloud costs in check without slowing down",
+      "summary": "A platform team's field guide to right-sizing workloads while keeping services resilient and ready to scale.",
+      "category": "Cloud",
+      "date": "September 22, 2026",
+      "read_time": "7 min read",
+      "author": "Sam Rivera",
+      "image": "photo-1451187580459-43490279c0fa",
+      "accent": "orange"
+    },
+    {
+      "slug": "the-new-rules-of-accessibility",
+      "title": "Accessibility is a product advantage",
+      "summary": "Small, intentional improvements can make your interface work better for everyone who uses it.",
+      "category": "Design",
+      "date": "September 18, 2026",
+      "read_time": "4 min read",
+      "author": "Alex Morgan",
+      "image": "photo-1558655146-d09347e92766",
+      "accent": "pink"
+    },
+    {
+      "slug": "open-source-maintainers-that-scale",
+      "title": "Open source maintainer habits that scale",
+      "summary": "Healthy projects are built on more than code. Here are the small practices that help communities thrive.",
+      "category": "Open source",
+      "date": "September 15, 2026",
+      "read_time": "6 min read",
+      "author": "Devon Brooks",
+      "image": "photo-1522071820081-009f0129c71c",
+      "accent": "teal"
+    }
+  ]
+}

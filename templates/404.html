@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Story not found — QASignal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>QASignal<span class="brand-period">.</span></span></a>
+        <a class="back-link" href="{{ url_for('index') }}">← All stories</a>
+      </div>
+    </header>
+    <main class="not-found wrap">
+      <span class="not-found-number">404</span>
+      <h1>This story took a wrong turn.</h1>
+      <p>The page you're looking for isn't here, but there's plenty more to explore.</p>
+      <a class="text-button" href="{{ url_for('index') }}">Back to the latest stories <span aria-hidden="true">→</span></a>
+    </main>
+  </body>
+</html>
