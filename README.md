@@ -13,6 +13,13 @@ python app.py
 
 Then open http://127.0.0.1:5000.
 
+## Deploy on Render
+
+Use `pip install -r requirements.txt` as the build command and
+`gunicorn app:app --bind 0.0.0.0:$PORT` as the start command. The first `app`
+refers to `app.py`; the second refers to the Flask application object in that
+file.
+
 ## Developer story editor
 
 Set a developer password before starting the app to enable the editor:
