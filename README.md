@@ -1,4 +1,4 @@
-# QASignal
+# QABeacon
 
 A responsive QA and automation testing publication built with Flask. It includes searchable stories, topic filters, individual story pages, and a newsletter signup form.
 
